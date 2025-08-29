@@ -7,6 +7,7 @@ const Home = () => {
         email: '',
         message: ''
       });
+      const [paywall, setPaywall] = useState(null);
       const [selectedAmount, setSelectedAmount] = useState(null);
       const [isSubmitting, setIsSubmitting] = useState(false);
       const [submitMessage, setSubmitMessage] = useState('');
@@ -36,22 +37,26 @@ const Home = () => {
             identifier: formData.email,
             ...(formData.message && { message: formData.message })
           });
-    
-          const response = await fetch(`http://localhost:4021/${selectedAmount}-dollar`);
+
+            const response = await fetch(`http://localhost:4021/${selectedAmount}-dollar`);
+            
+            const data = await response.json();
+            
+            const paywallHTML = getPaywallHtml(
+              {
+                amount: amount,
+                paymentRequirements: JSON.stringify(data.accepts[0]),
+                currentUrl: 'http://localhost:3000',
+                testnet: 'base-sepolia',
+                appName: 'StreamLabs',
+                appLogo: 'https://streamlabs.com/favicon.ico',
+            });
+            console.log(paywallHTML);
+            setPaywall(paywallHTML);
+          
           // send post request with X-payment header
-          const data = await response.json();
-
-          const paywall = getPaywallHtml(
-            {
-              amout: amount,
-              paymentRequirements: JSON.stringify(data.assets[0]),
-              currentUrl: 'http://localhost:3000',
-              testnet: 'base-sepolia',
-              appName: 'StreamLabs',
-              appLogo: 'https://streamlabs.com/favicon.ico',
-           });
-
-          console.log(paywall);
+           
+          
           // if (response.ok) {
           //   setSubmitMessage(`Success! ${data.message}`);
           //   setFormData({ name: '', email: '', message: '' });
@@ -60,6 +65,7 @@ const Home = () => {
           //   setSubmitMessage(`Error: ${data.message}`);
           // }
         } catch (error) {
+          console.log(error);
           setSubmitMessage('Error connecting to server. Please try again.');
         } finally {
           setIsSubmitting(false);
@@ -69,6 +75,9 @@ const Home = () => {
       const dollarAmounts = [1, 5, 10, 20, 50, 100];
     
       return (
+        paywall ? (
+          <div dangerouslySetInnerHTML={{ __html: paywall }} />
+        ) : (
         <div className="min-h-screen bg-gradient-to-br from-blue-500 via-purple-600 to-blue-700 p-5">
           <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
             <header className="bg-gradient-to-r from-blue-600 to-purple-700 text-white p-10 text-center">
@@ -170,7 +179,7 @@ const Home = () => {
               )}
             </form>
           </div>
-        </div>
+        </div>)
     )
 }
 
