@@ -40,14 +40,25 @@ const Home = () => {
           const response = await fetch(`http://localhost:4021/${selectedAmount}-dollar`);
           // send post request with X-payment header
           const data = await response.json();
-    
-          if (response.ok) {
-            setSubmitMessage(`Success! ${data.message}`);
-            setFormData({ name: '', email: '', message: '' });
-            setSelectedAmount(null);
-          } else {
-            setSubmitMessage(`Error: ${data.message}`);
-          }
+
+          const paywall = getPaywallHtml(
+            {
+              amout: amount,
+              paymentRequirements: JSON.stringify(data.assets[0]),
+              currentUrl: 'http://localhost:3000',
+              testnet: 'base-sepolia',
+              appName: 'StreamLabs',
+              appLogo: 'https://streamlabs.com/favicon.ico',
+           });
+
+          console.log(paywall);
+          // if (response.ok) {
+          //   setSubmitMessage(`Success! ${data.message}`);
+          //   setFormData({ name: '', email: '', message: '' });
+          //   setSelectedAmount(null);
+          // } else {
+          //   setSubmitMessage(`Error: ${data.message}`);
+          // }
         } catch (error) {
           setSubmitMessage('Error connecting to server. Please try again.');
         } finally {

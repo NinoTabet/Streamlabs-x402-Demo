@@ -54,10 +54,10 @@ app.use(
 
 app.post("/1-dollar", (req, res) => {
   const { amount, name, identifier, message } = req.query;
-  if (!amount || !name) {
-    return res.status(400).send({message: "A donation amount and name are required"});
-  }
-
+    if (!amount || !name) {
+      return res.status(400).send({message: "A donation amount and name are required"});
+    }
+  
   res.status(200).send({message: "Donation successful"});
 });
 
