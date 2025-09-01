@@ -52,7 +52,7 @@ app.use(
   ),
 );
 
-app.post("/1-dollar", (req, res) => {
+app.get("/1-dollar", (req, res) => {
   const { amount, name, identifier, message } = req.query;
     if (!amount || !name) {
       return res.status(400).send({message: "A donation amount and name are required"});
@@ -61,7 +61,7 @@ app.post("/1-dollar", (req, res) => {
   res.status(200).send({message: "Donation successful"});
 });
 
-app.get("/5-dollar", (req, res) => {
+app.post("/5-dollar", (req, res) => {
   const { amount, name, identifier, message } = req.query;
   if (!amount || !name) {
     return res.status(400).send({message: "A donation amount and name are required"});
@@ -69,7 +69,7 @@ app.get("/5-dollar", (req, res) => {
   res.status(200).send({message: "Donation successful"});
 });
 
-app.get("/10-dollar", (req, res) => {
+app.post("/10-dollar", (req, res) => {
   const { amount, name, identifier, message } = req.query;
   if (!amount || !name) {
     return res.status(400).send({message: "A donation amount and name are required"});
@@ -77,7 +77,7 @@ app.get("/10-dollar", (req, res) => {
   res.status(200).send({message: "Donation successful"});
 });
 
-app.get("/20-dollar", (req, res) => {
+app.post("/20-dollar", (req, res) => {
   const { amount, name, identifier, message } = req.query;
   if (!amount || !name) {
     return res.status(400).send({message: "A donation amount and name are required"});
@@ -85,7 +85,7 @@ app.get("/20-dollar", (req, res) => {
   res.status(200).send({message: "Donation successful"});
 });
 
-app.get("/50-dollar", (req, res) => {
+app.post("/50-dollar", (req, res) => {
   const { amount, name, identifier, message } = req.query;
   if (!amount || !name) {
     return res.status(400).send({message: "A donation amount and name are required"});
@@ -93,7 +93,7 @@ app.get("/50-dollar", (req, res) => {
   res.status(200).send({message: "Donation successful"});
 });
 
-app.get("/100-dollar", (req, res) => {
+app.post("/100-dollar", (req, res) => {
   const { amount, name, identifier, message } = req.query;
   if (!amount || !name) {
     return res.status(400).send({message: "A donation amount and name are required"});

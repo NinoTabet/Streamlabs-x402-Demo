@@ -2,16 +2,16 @@ import { useState } from 'react';
 import {getPaywallHtml} from 'x402/shared';
 
 const Home = () => {
-    const [formData, setFormData] = useState({
+          const [formData, setFormData] = useState({
         name: '',
         email: '',
         message: ''
       });
-      const [paywall, setPaywall] = useState(null);
+      const [payWall, setPayWall] = useState(null);
       const [selectedAmount, setSelectedAmount] = useState(null);
       const [isSubmitting, setIsSubmitting] = useState(false);
       const [submitMessage, setSubmitMessage] = useState('');
-    
+
       const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -30,29 +30,20 @@ const Home = () => {
         setSubmitMessage('');
     
         try {
-          const endpoint = `/${amount}-dollar`;
-          const queryParams = new URLSearchParams({
-            amount: amount,
-            name: formData.name,
-            identifier: formData.email,
-            ...(formData.message && { message: formData.message })
-          });
-
-            const response = await fetch(`http://localhost:4021/${selectedAmount}-dollar`);
+          const response = await fetch(`http://localhost:4021/${amount}-dollar`);
             
             const data = await response.json();
             
-            const paywallHTML = getPaywallHtml(
-              {
-                amount: amount,
-                paymentRequirements: JSON.stringify(data.accepts[0]),
-                currentUrl: 'http://localhost:3000',
-                testnet: 'base-sepolia',
-                appName: 'StreamLabs',
-                appLogo: 'https://streamlabs.com/favicon.ico',
+            const payWallHtml = getPaywallHtml({
+              amount: amount,
+              paymentRequirements: data.accepts,
+              currentUrl: 'http://localhost:3000',
+              testnet: true,
+              appName: 'StreamLabs',
+              appLogo: 'https://streamlabs.com/favicon.ico',
             });
-            console.log(paywallHTML);
-            setPaywall(paywallHTML);
+
+            setPayWall(payWallHtml);
           
           // send post request with X-payment header
            
@@ -75,8 +66,14 @@ const Home = () => {
       const dollarAmounts = [1, 5, 10, 20, 50, 100];
     
       return (
-        paywall ? (
-          <div dangerouslySetInnerHTML={{ __html: paywall }} />
+        payWall ? (
+          <div>
+            <iframe
+              srcDoc={payWall}
+              className="w-full h-screen border-0"
+              title="Paywall"
+            />
+          </div>
         ) : (
         <div className="min-h-screen bg-gradient-to-br from-blue-500 via-purple-600 to-blue-700 p-5">
           <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
