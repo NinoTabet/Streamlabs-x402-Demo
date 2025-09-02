@@ -21,11 +21,11 @@ app.use(
   paymentMiddleware(
     payTo,
     {
-      "GET /1-dollar": {
-        price: "$1",
+      "POST /1-dollar": {
+        price: "$0.001",
         network: "base-sepolia",
-      }
-      ,"GET /5-dollar": {
+      },
+      "GET /5-dollar": {
         price: "$5",
         network: "base-sepolia",
       }
@@ -52,12 +52,11 @@ app.use(
   ),
 );
 
-app.get("/1-dollar", (req, res) => {
-  const { amount, name, identifier, message } = req.query;
-    if (!amount || !name) {
-      return res.status(400).send({message: "A donation amount and name are required"});
-    }
-  
+app.post("/1-dollar", (req, res) => {
+  const { amount, name, identifier, message } = req.body;
+  if (!amount || !name) {
+    return res.status(400).send({message: "A donation amount and name are required"});
+  }
   res.status(200).send({message: "Donation successful"});
 });
 
