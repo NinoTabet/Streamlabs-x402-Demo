@@ -54,6 +54,23 @@ app.use(
   ),
 );
 
+//make a function that can be called in all of my donation endpoints that makes the api call to streamlabs
+const makeStreamlabsApiCall = async (amount: number, name: string, identifier: string, message: string) => {
+  await axios.post("https://streamlabs.com/api/v2.0/donations", {
+    name: name,
+    message: message || null,
+    identifier: identifier,
+    amount: amount,
+    currency: "USD"
+  }, {
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      'Authorization': `Bearer ${process.env.STREAMLABS_TOKEN}`
+    }
+  });
+}
+
 app.post("/1-dollar", async (req, res) => {
   const { amount, name, identifier, message } = req.body;
   try {
@@ -61,79 +78,101 @@ app.post("/1-dollar", async (req, res) => {
       return res.status(400).send({message: "A donation amount and name are required"});
     }
 
-    // i want to send a post request to https://streamlabs.com/api/v2.0/donations with the following body template:
-    //{
-    // "name":"xXxMeowMaster69xXx",
-    // "message":"ere ere ara!",
-    // "identifier":"meow@gmail.com",
-    // "amount":50000000000000,
-    // "currency":"USD"
-    // }
-    // but the api call needs to be made with the req.body variables
-
-    const response = await axios.post("https://streamlabs.com/api/v2.0/donations", {
-      name: name,
-      message: message || null,
-      identifier: identifier,
-      amount: amount,
-      currency: "USD"
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'Authorization': `Bearer ${process.env.STREAMLABS_TOKEN}`
-      }
-    });
-
+    await makeStreamlabsApiCall(amount, name, identifier, message);
     res.status(200).send({message: "Donation successful"});
     
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({message: "An error occurred"});
+  }});
   
-} catch (error) {
-  console.error(error);
-  return res.status(500).send({message: "An error occurred"});
+app.post("/5-dollar", async (req, res) => {
+  const { amount, name, identifier, message } = req.body;
+  try {
+    if (!amount || !name) {
+      return res.status(400).send({message: "A donation amount and name are required"});
+    }
+
+    await makeStreamlabsApiCall(amount, name, identifier, message);
+    res.status(200).send({message: "Donation successful"});
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({message: "An error occurred"});
 }});
-  
 
-app.post("/5-dollar", (req, res) => {
-  const { amount, name, identifier, message } = req.query;
-  if (!amount || !name) {
-    return res.status(400).send({message: "A donation amount and name are required"});
-  }
+app.post("/10-dollar", async (req, res) => {
+  const { amount, name, identifier, message } = req.body;
+  try {
+    if (!amount || !name) {
+      return res.status(400).send({message: "A donation amount and name are required"});
+    }
 
+    await makeStreamlabsApiCall(amount, name, identifier, message);
+    res.status(200).send({message: "Donation successful"});
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({message: "An error occurred"});
+}});
 
-  res.status(200).send({message: "Donation successful"});
-});
+app.post("/20-dollar", async (req, res) => {
+  const { amount, name, identifier, message } = req.body;
+  try {
+    if (!amount || !name) {
+      return res.status(400).send({message: "A donation amount and name are required"});
+    }
 
-app.post("/10-dollar", (req, res) => {
-  const { amount, name, identifier, message } = req.query;
-  if (!amount || !name) {
-    return res.status(400).send({message: "A donation amount and name are required"});
-  }
-  res.status(200).send({message: "Donation successful"});
-});
+    await makeStreamlabsApiCall(amount, name, identifier, message);
+    res.status(200).send({message: "Donation successful"});
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({message: "An error occurred"});
+}});
 
-app.post("/20-dollar", (req, res) => {
-  const { amount, name, identifier, message } = req.query;
-  if (!amount || !name) {
-    return res.status(400).send({message: "A donation amount and name are required"});
-  }
-  res.status(200).send({message: "Donation successful"});
-});
+app.post("/50-dollar", async (req, res) => {
+  const { amount, name, identifier, message } = req.body;
+  try {
+    if (!amount || !name) {
+      return res.status(400).send({message: "A donation amount and name are required"});
+    }
 
-app.post("/50-dollar", (req, res) => {
-  const { amount, name, identifier, message } = req.query;
-  if (!amount || !name) {
-    return res.status(400).send({message: "A donation amount and name are required"});
-  }
-  res.status(200).send({message: "Donation successful"});
-});
+    await makeStreamlabsApiCall(amount, name, identifier, message);
+    res.status(200).send({message: "Donation successful"});
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({message: "An error occurred"});
+}});
 
-app.post("/100-dollar", (req, res) => {
-  const { amount, name, identifier, message } = req.query;
-  if (!amount || !name) {
-    return res.status(400).send({message: "A donation amount and name are required"});
-  }
-  res.status(200).send({message: "Donation successful"});
+app.post("/100-dollar", async (req, res) => {
+  const { amount, name, identifier, message } = req.body;
+  try {
+    if (!amount || !name) {
+      return res.status(400).send({message: "A donation amount and name are required"});
+    }
+
+    await makeStreamlabsApiCall(amount, name, identifier, message);
+    res.status(200).send({message: "Donation successful"});
+    
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({message: "An error occurred"});
+}});
+
+app.get("/get-streamer-info", async (req, res) => {
+
+  //make api call to streamlabs to get the streamer info
+  const response = await axios.get("https://streamlabs.com/api/v2.0/user", {
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      'Authorization': `Bearer ${process.env.STREAMLABS_TOKEN}`
+    }
+  });
+
+  res.status(200).send(response);
 });
 
 // create streamlabs api call logic here
