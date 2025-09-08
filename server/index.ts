@@ -162,17 +162,19 @@ app.post("/100-dollar", async (req, res) => {
 }});
 
 app.get("/get-streamer-info", async (req, res) => {
-
+try{
   //make api call to streamlabs to get the streamer info
   const response = await axios.get("https://streamlabs.com/api/v2.0/user", {
     headers: {
       'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest',
       'Authorization': `Bearer ${process.env.STREAMLABS_TOKEN}`
     }
   });
-
-  res.status(200).send(response);
+  return res.status(200).json(response.data);
+} catch (error) {
+  console.error(error);
+  return res.status(500).send({message: "An error occurred"});
+}
 });
 
 // create streamlabs api call logic here

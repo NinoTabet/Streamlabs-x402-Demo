@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { PaywallApp } from './PaywallApp';
 import { Providers } from './Providers';
 
@@ -19,13 +19,39 @@ interface ServerResponse {
   message?: string;
 }
 
+
 const Home: React.FC = () => {
   const [formData, setFormData] = useState<FormData | null>(null)
   const [payWall, setPayWall] = useState<any | null>(null);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitMessage, setSubmitMessage] = useState<string>('');
+  const [displayName, setDisplayName] = useState<string>('');
+  const [thumbnailUrl, setThumbnailUrl] = useState<string>('');
+  // Fetch streamer info when component mounts
+  useEffect(() => {
+    const fetchStreamerInfo = async () => {
+      try {
+        const response = await fetch('http://localhost:4021/get-streamer-info');
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Streamer info response:', data);
+          
+          // Extract display name and thumbnail from the streamlabs object
+          if (data && data.streamlabs) {
+            setDisplayName(data.streamlabs.display_name || '');
+            setThumbnailUrl(data.streamlabs.thumbnail || '');
+          }
+        } else {
+          console.error('Failed to fetch streamer info:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching streamer info:', error);
+      }
+    };
 
+    fetchStreamerInfo();
+  }, []);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -95,9 +121,22 @@ const Home: React.FC = () => {
       {/* Form content */}
       <div className={`min-h-screen bg-gradient-to-br from-blue-500 via-purple-600 to-blue-700 p-5 ${payWall ? 'pointer-events-none' : ''}`}>
         <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
-          <header className="bg-gradient-to-r from-blue-600 to-purple-700 text-white p-10 text-center">
-            <h1 className="text-4xl font-bold mb-3">Welcome to StreamLabs</h1>
-            <p className="text-xl opacity-90">Support your favorite creators with a donation</p>
+          <header 
+            className="text-white p-10 text-center relative"
+            style={{
+              backgroundImage: thumbnailUrl ? `url(${thumbnailUrl})` : 'linear-gradient(to right, #2563eb, #7c3aed)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            <div className="absolute inset-0 bg-black bg-opacity-20 rounded-t-3xl"></div>
+            <div className="relative z-10">
+              <h1 className="text-4xl font-bold mb-3">
+                {displayName ? displayName : 'Welcome to StreamLabs'}
+              </h1>
+              <p className="text-xl opacity-90">Support {displayName} with a donation</p>
+            </div>
           </header>
 
           <form className="p-10" onSubmit={(e: FormEvent) => e.preventDefault()}>
