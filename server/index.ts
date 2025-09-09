@@ -24,26 +24,26 @@ app.use(
     payTo,
     {
       "POST /1-dollar": {
-        price: "$0.001",
+        price: "$1",
         network: "base-sepolia",
       },
-      "GET /5-dollar": {
+      "POST /5-dollar": {
         price: "$5",
         network: "base-sepolia",
       }
-      ,"GET /10-dollar": {
+      ,"POST /10-dollar": {
         price: "$10",
         network: "base-sepolia",
       }
-      ,"GET /20-dollar": {
+      ,"POST /20-dollar": {
         price: "$20",
         network: "base-sepolia",
       }
-      ,"GET /50-dollar": {
+      ,"POST /50-dollar": {
         price: "$50",
         network: "base-sepolia",
       }
-      ,"GET /100-dollar": {
+      ,"POST /100-dollar": {
         price: "$100",
         network: "base-sepolia",
       }
@@ -79,7 +79,8 @@ app.post("/1-dollar", async (req, res) => {
     }
 
     await makeStreamlabsApiCall(amount, name, identifier, message);
-    res.status(200).send({message: "Donation successful"});
+    console.log("Donation successful");
+    return res.status(200).send({message: "Donation successful"});
     
   } catch (error) {
     console.error(error);
@@ -94,7 +95,8 @@ app.post("/5-dollar", async (req, res) => {
     }
 
     await makeStreamlabsApiCall(amount, name, identifier, message);
-    res.status(200).send({message: "Donation successful"});
+    console.log("Donation successful");
+    return res.status(200).send({message: "Donation successful"});
     
   } catch (error) {
     console.error(error);
@@ -109,7 +111,7 @@ app.post("/10-dollar", async (req, res) => {
     }
 
     await makeStreamlabsApiCall(amount, name, identifier, message);
-    res.status(200).send({message: "Donation successful"});
+    return res.status(200).send({message: "Donation successful"});
     
   } catch (error) {
     console.error(error);
@@ -124,7 +126,7 @@ app.post("/20-dollar", async (req, res) => {
     }
 
     await makeStreamlabsApiCall(amount, name, identifier, message);
-    res.status(200).send({message: "Donation successful"});
+    return res.status(200).send({message: "Donation successful"});
     
   } catch (error) {
     console.error(error);
@@ -139,7 +141,7 @@ app.post("/50-dollar", async (req, res) => {
     }
 
     await makeStreamlabsApiCall(amount, name, identifier, message);
-    res.status(200).send({message: "Donation successful"});
+    return res.status(200).send({message: "Donation successful"});
     
   } catch (error) {
     console.error(error);
@@ -154,7 +156,7 @@ app.post("/100-dollar", async (req, res) => {
     }
 
     await makeStreamlabsApiCall(amount, name, identifier, message);
-    res.status(200).send({message: "Donation successful"});
+    return res.status(200).send({message: "Donation successful"});
     
   } catch (error) {
     console.error(error);

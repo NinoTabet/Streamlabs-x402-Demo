@@ -75,7 +75,37 @@ h6 {
 }
 
 [data-testid="ockWalletDropdown"] {
-  z-index: 10;
+  z-index: 60;
+}
+
+/* Ensure wallet connection modals appear above payment overlay */
+[data-testid="ockConnectWalletModal"],
+[data-testid="ockWalletModal"],
+[data-testid="ockWalletDropdown"] {
+  z-index: 60 !important;
+}
+
+/* Wallet connection button and related elements */
+.ock-connect-wallet-modal,
+.ock-wallet-modal,
+.ock-wallet-dropdown {
+  z-index: 60 !important;
+}
+
+/* Additional wallet modal selectors for Coinbase OnchainKit */
+div[role="dialog"],
+[data-radix-portal] > div,
+[data-radix-dialog-content],
+[data-radix-dialog-overlay] {
+  z-index: 60 !important;
+}
+
+/* Ensure wallet modals are above everything else */
+.ock-connect-wallet-modal *,
+.ock-wallet-modal *,
+[data-testid="ockConnectWalletModal"] *,
+[data-testid="ockWalletModal"] * {
+  z-index: 60 !important;
 }
 
 body {

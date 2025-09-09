@@ -114,6 +114,27 @@ const Home: React.FC = () => {
     }
   };
 
+  const handlePaymentComplete = (response: Response) => {
+    // Reset the form and close paywall after successful payment
+    setFormData({
+      name: '',
+      email: '',
+      message: ''
+    });
+    setSelectedAmount(null);
+    setPayWall(null);
+    setSubmitMessage('Donation successful! Thank you for your support.');
+    
+    // Clear success message after 5 seconds
+    setTimeout(() => {
+      setSubmitMessage('');
+    }, 10000);
+  };
+
+  const handlePaymentError = (error: Error) => {
+    setSubmitMessage(`Payment failed: ${error.message}`);
+  };
+
   const dollarAmounts: number[] = [1, 5, 10, 20, 50, 100];
 
   return (
@@ -237,7 +258,7 @@ const Home: React.FC = () => {
 
       {/* Paywall overlay */}
       {payWall && (
-        <div className="fixed inset-0 bg-gradient-to-br from-blue-500/90 via-purple-600/90 to-blue-700/90 backdrop-blur-sm z-50">
+        <div className="fixed inset-0 bg-gradient-to-br from-blue-500/90 via-purple-600/90 to-blue-700/90 backdrop-blur-sm z-40">
           <div className="bg-white shadow-sm border-b">
             <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
               <button
@@ -255,7 +276,12 @@ const Home: React.FC = () => {
             </div>
           </div>
           <Providers config={payWall}>
-            <PaywallApp config={payWall} bodyData={formData}/>
+            <PaywallApp 
+              config={payWall} 
+              bodyData={formData}
+              onPaymentComplete={handlePaymentComplete}
+              onPaymentError={handlePaymentError}
+            />
           </Providers>
         </div>
       )}
