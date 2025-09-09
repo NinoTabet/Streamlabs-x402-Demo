@@ -20,7 +20,7 @@ interface ServerResponse {
 }
 
 
-const Home: React.FC = () => {
+const Profile: React.FC = () => {
   const [formData, setFormData] = useState<FormData | null>(null)
   const [payWall, setPayWall] = useState<any | null>(null);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
@@ -289,4 +289,6 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Profile;
+
+
