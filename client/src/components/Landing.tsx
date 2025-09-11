@@ -28,7 +28,12 @@ const Landing: React.FC = () => {
             <p className="mt-6 max-w-2xl mx-auto text-lg text-white/80">
               Get tips instantly from your fans—no delays, no extra rules. Tipsy makes it easy to accept digital donations with StreamLabs.
             </p>
-            <form className="mt-10 flex items-center justify-center gap-3" action="#" method="post">
+            <form
+              id="waitlist-header"
+              className="mt-10 flex items-center justify-center gap-3 launchlist-form"
+              action="https://getlaunchlist.com/s/ZvLMi7"
+              method="post"
+            >
               <input
                 name="email"
                 type="email"
@@ -168,7 +173,12 @@ const Landing: React.FC = () => {
           <p className="mt-3 text-white/80 max-w-2xl mx-auto">
             Skip delays, keep more, and delight your fans. Crypto tips for modern creators.
           </p>
-          <form id="waitlist" action="#" method="post" className="mt-8 flex items-center justify-center gap-3">
+          <form 
+            id="waitlist-footer" 
+            action="https://getlaunchlist.com/s/ZvLMi7" 
+            method="post"
+            className="mt-8 flex items-center justify-center gap-3 launchlist-form"
+          >
             <input
               name="email"
               type="email"
