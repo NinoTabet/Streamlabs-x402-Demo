@@ -1,4 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { API_BASE_URL } from '../config';
 import { PaywallApp } from './PaywallApp';
 import { Providers } from './Providers';
 
@@ -32,7 +33,7 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const fetchStreamerInfo = async () => {
       try {
-        const response = await fetch('http://localhost:4021/get-streamer-info');
+        const response = await fetch(`${API_BASE_URL}/get-streamer-info`);
         if (response.ok) {
           const data = await response.json();
           console.log('Streamer info response:', data);
@@ -79,7 +80,7 @@ const Profile: React.FC = () => {
           amount: amount
         }
         setFormData(formDataCollected as FormData);
-        const response = await fetch(`http://localhost:4021/${amount}-dollar`, {
+        const response = await fetch(`${API_BASE_URL}/${amount}-dollar`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -96,7 +97,7 @@ const Profile: React.FC = () => {
         const payWallValue = ({
           amount: amount,
           paymentRequirements: data.accepts,
-          currentUrl: `http://localhost:4021/${amount}-dollar`,
+          currentUrl: `${API_BASE_URL}/${amount}-dollar`,
           testnet: data.accepts[0].network,
           appName: 'StreamLabs',
           appLogo: 'https://streamlabs.com/favicon.ico',
