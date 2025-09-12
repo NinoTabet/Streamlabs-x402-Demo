@@ -1,12 +1,13 @@
 import { config } from "dotenv";
 import express from "express";
 import axios from "axios";
-import { paymentMiddleware, Resource } from "x402-express";
+import { paymentMiddleware, Resource, Network } from "x402-express";
 import cors from "cors";
 config();
 
 const facilitatorUrl = process.env.FACILITATOR_URL as Resource;
 const payTo = process.env.ADDRESS as `0x${string}`;
+const network = process.env.NETWORK as Network;
 
 if (!facilitatorUrl || !payTo) {
   console.error("Missing required environment variables");
@@ -25,27 +26,27 @@ app.use(
     {
       "POST /1-dollar": {
         price: "$1",
-        network: "base-sepolia",
+        network,
       },
       "POST /5-dollar": {
         price: "$5",
-        network: "base-sepolia",
+        network,
       }
       ,"POST /10-dollar": {
         price: "$10",
-        network: "base-sepolia",
+        network,
       }
       ,"POST /20-dollar": {
         price: "$20",
-        network: "base-sepolia",
+        network,
       }
       ,"POST /50-dollar": {
         price: "$50",
-        network: "base-sepolia",
+        network,
       }
       ,"POST /100-dollar": {
         price: "$100",
-        network: "base-sepolia",
+        network,
       }
     },
     {

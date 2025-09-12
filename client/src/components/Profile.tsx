@@ -98,7 +98,7 @@ const Profile: React.FC = () => {
           amount: amount,
           paymentRequirements: data.accepts,
           currentUrl: `${API_BASE_URL}/${amount}-dollar`,
-          testnet: data.accepts[0].network,
+          testnet: data.accepts[0].network === 'base-sepolia' ? true : false,
           appName: 'StreamLabs',
           appLogo: 'https://streamlabs.com/favicon.ico',
         });
