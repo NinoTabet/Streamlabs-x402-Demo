@@ -18,7 +18,7 @@ const Landing: React.FC = () => {
       {/* Hero */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-purple-700/30 via-indigo-600/10 to-transparent pointer-events-none" />
-        <SectionContainer className="min-h-[80vh] flex items-center justify-center pt-24 pb-32">
+        <SectionContainer className="min-h-[80vh] flex items-center justify-center pt-24 pb-20">
           <div className="text-center">
             <h1 className="mt-4 text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight">
               <span className="text-white">Your StreamLabs Just Got a </span>
@@ -45,6 +45,20 @@ const Landing: React.FC = () => {
                 Join the Waitlist
               </button>
             </form>
+            <div className="mt-12 md:mt-16 flex items-center justify-center">
+              <a
+                href="/Nino8291"
+                className="group relative inline-flex items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500 px-7 py-3 text-base md:text-lg font-extrabold text-white shadow-lg shadow-fuchsia-500/30 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_0_28px_rgba(168,85,247,0.65)] active:scale-95"
+              >
+                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                <span className="relative z-10 inline-flex items-center">
+                  Try the Demo
+                  <svg aria-hidden="true" className="ml-2 h-4 w-4 md:h-5 md:w-5 text-white/90 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </a>
+            </div>
           </div>
         </SectionContainer>
       </div>
@@ -82,9 +96,14 @@ const Landing: React.FC = () => {
           </p>
         </div>
         <div className="mt-10 flex justify-center">
-          <div className="rounded-2xl border border-white/10 bg-white/5 px-8 py-6 text-center">
-            <div className="text-sm uppercase tracking-widest text-white/60">Start earning</div>
-            <div className="mt-2 text-2xl font-bold">$ <span className="text-fuchsia-300">instant</span> tips</div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-8 text-center max-w-4xl">
+            <div className="rounded-xl overflow-hidden shadow-2xl">
+              <img 
+                src="/easy-to-add.webp" 
+                alt="Easy to add Tipsy to your stream" 
+                className="w-full h-auto"
+              />
+            </div>
           </div>
         </div>
       </SectionContainer>

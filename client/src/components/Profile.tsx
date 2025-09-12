@@ -155,7 +155,7 @@ const Profile: React.FC = () => {
             <div className="absolute inset-0 bg-black bg-opacity-20 rounded-t-3xl"></div>
             <div className="relative z-10">
               <h1 className="text-4xl font-bold mb-3">
-                {displayName ? displayName : 'Welcome to StreamLabs'}
+                {displayName ? displayName : 'Welcome to TipsyLink'}
               </h1>
               <p className="text-xl opacity-90">Support {displayName} with a donation</p>
             </div>
