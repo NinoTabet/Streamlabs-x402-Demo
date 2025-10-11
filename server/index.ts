@@ -2,6 +2,7 @@ import { config } from "dotenv";
 import express from "express";
 import axios from "axios";
 import { paymentMiddleware, Resource, Network } from "x402-express";
+import { X402PaymentHandler } from "@payai/x402-solana/server";
 import cors from "cors";
 config();
 
@@ -9,10 +10,23 @@ const facilitatorUrl = process.env.FACILITATOR_URL as Resource;
 const payTo = process.env.ADDRESS as `0x${string}`;
 const network = process.env.NETWORK as Network;
 
+// Solana configuration
+const solanaTreasuryAddress = process.env.SOLANA_TREASURY_ADDRESS as string;
+const solanaFacilitatorUrl = process.env.SOLANA_FACILITATOR_URL || "https://facilitator.payai.network";
+
 if (!facilitatorUrl || !payTo) {
   console.error("Missing required environment variables");
   process.exit(1);
 }
+
+// Initialize Solana payment handler
+const solanaX402 = solanaTreasuryAddress
+  ? new X402PaymentHandler({
+      network: "solana-devnet",
+      treasuryAddress: solanaTreasuryAddress,
+      facilitatorUrl: solanaFacilitatorUrl,
+    })
+  : null;
 
 const app = express();
 
@@ -181,6 +195,121 @@ try{
 });
 
 // create streamlabs api call logic here
+
+// ========================================
+// Solana Payment Endpoints
+// ========================================
+
+if (solanaX402) {
+  // Helper function to create Solana payment requirements
+  const createSolanaPaymentRequirements = async (amount: number) => {
+    const usdcMintDevnet = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
+    const microAmount = (amount * 1_000_000).toString(); // Convert dollars to USDC micro-units
+
+    return await solanaX402.createPaymentRequirements({
+      price: {
+        amount: microAmount,
+        asset: {
+          address: usdcMintDevnet,
+        },
+      },
+      network: "solana-devnet",
+      config: {
+        description: `$${amount} donation`,
+        resource: `${process.env.BASE_URL || "http://localhost:4021"}/solana/${amount}-dollar`,
+      },
+    });
+  };
+
+  // Solana payment endpoints
+  app.post("/solana/1-dollar", async (req, res) => {
+    try {
+      const paymentHeader = solanaX402.extractPayment(req.headers);
+      const paymentRequirements = await createSolanaPaymentRequirements(1);
+
+      if (!paymentHeader) {
+        const response = solanaX402.create402Response(paymentRequirements);
+        return res.status(response.status).json(response.body);
+      }
+
+      const verified = await solanaX402.verifyPayment(paymentHeader, paymentRequirements);
+      if (!verified) {
+        return res.status(402).json({ error: "Invalid payment" });
+      }
+
+      const { amount, name, identifier, message } = req.body;
+      if (amount && name) {
+        await makeStreamlabsApiCall(amount, name, identifier, message);
+      }
+
+      await solanaX402.settlePayment(paymentHeader, paymentRequirements);
+      return res.status(200).json({ message: "Payment successful" });
+    } catch (error) {
+      console.error("Solana payment error:", error);
+      return res.status(500).json({ message: "An error occurred" });
+    }
+  });
+
+  app.post("/solana/5-dollar", async (req, res) => {
+    try {
+      const paymentHeader = solanaX402.extractPayment(req.headers);
+      const paymentRequirements = await createSolanaPaymentRequirements(5);
+
+      if (!paymentHeader) {
+        const response = solanaX402.create402Response(paymentRequirements);
+        return res.status(response.status).json(response.body);
+      }
+
+      const verified = await solanaX402.verifyPayment(paymentHeader, paymentRequirements);
+      if (!verified) {
+        return res.status(402).json({ error: "Invalid payment" });
+      }
+
+      const { amount, name, identifier, message } = req.body;
+      if (amount && name) {
+        await makeStreamlabsApiCall(amount, name, identifier, message);
+      }
+
+      await solanaX402.settlePayment(paymentHeader, paymentRequirements);
+      return res.status(200).json({ message: "Payment successful" });
+    } catch (error) {
+      console.error("Solana payment error:", error);
+      return res.status(500).json({ message: "An error occurred" });
+    }
+  });
+
+  app.post("/solana/10-dollar", async (req, res) => {
+    try {
+      const paymentHeader = solanaX402.extractPayment(req.headers);
+      const paymentRequirements = await createSolanaPaymentRequirements(10);
+
+      if (!paymentHeader) {
+        const response = solanaX402.create402Response(paymentRequirements);
+        return res.status(response.status).json(response.body);
+      }
+
+      const verified = await solanaX402.verifyPayment(paymentHeader, paymentRequirements);
+      if (!verified) {
+        return res.status(402).json({ error: "Invalid payment" });
+      }
+
+      const { amount, name, identifier, message } = req.body;
+      if (amount && name) {
+        await makeStreamlabsApiCall(amount, name, identifier, message);
+      }
+
+      await solanaX402.settlePayment(paymentHeader, paymentRequirements);
+      return res.status(200).json({ message: "Payment successful" });
+    } catch (error) {
+      console.error("Solana payment error:", error);
+      return res.status(500).json({ message: "An error occurred" });
+    }
+  });
+
+  console.log("✅ Solana payment endpoints enabled");
+} else {
+  console.log("⚠️  Solana payment endpoints disabled (SOLANA_TREASURY_ADDRESS not set)");
+}
 
 app.listen(4021, () => {
   console.log(`Server listening at http://localhost:${4021}`);
