@@ -4,8 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { createX402Client } from "@payai/x402-solana/client";
-import { usdToMicroUsdc, microUsdcToUsd } from "@payai/x402-solana/utils";
-import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 import { getAssociatedTokenAddress, getAccount } from "@solana/spl-token";
 
 import { Spinner } from "./Spinner";
@@ -59,6 +58,7 @@ export function PaywallAppSolana({
     if (connected && publicKey) {
       checkUSDCBalance();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connected, publicKey]);
 
   const checkUSDCBalance = useCallback(async () => {
