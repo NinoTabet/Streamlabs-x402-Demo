@@ -10,11 +10,6 @@ interface FormData {
   message: string;
 }
 
-interface PaymentData {
-  type: string;
-  [key: string]: any;
-}
-
 interface ServerResponse {
   accepts: any;
   message?: string;
