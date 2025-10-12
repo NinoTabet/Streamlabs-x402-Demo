@@ -205,18 +205,20 @@ if (solanaX402) {
   const createSolanaPaymentRequirements = async (amount: number) => {
     const usdcMintDevnet = "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU";
     const microAmount = (amount * 1_000_000).toString(); // Convert dollars to USDC micro-units
+    const baseUrl = process.env.BASE_URL || "http://localhost:4021";
 
     return await solanaX402.createPaymentRequirements({
       price: {
         amount: microAmount,
         asset: {
           address: usdcMintDevnet,
+          decimals: 6, // USDC has 6 decimals
         },
       },
       network: "solana-devnet",
       config: {
         description: `$${amount} donation`,
-        resource: `${process.env.BASE_URL || "http://localhost:4021"}/solana/${amount}-dollar`,
+        resource: `${baseUrl}/solana/${amount}-dollar` as `${string}://${string}`,
       },
     });
   };
